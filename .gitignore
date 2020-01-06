@@ -2,3 +2,13 @@
 *.txt
 *.corrected
 work/data/kdd/kddcup.data_10_percent_corrected
+work/data/nsl_kdd/KDDTest-21.arff
+work/data/nsl_kdd/KDDTrain+_20Percent.arff
+work/data/nsl_kdd/KDDTrain1.jpg
+work/data/nsl_kdd/KDDTrain+.csv
+work/data/nsl_kdd/KDDTrain+.arff
+work/data/nsl_kdd/KDDTest1.jpg
+work/data/nsl_kdd/KDDTest+.arff
+work/data/kdd/kddcup.testdata.unlabeled
+work/data/kdd/kddcup.newtestdata_10_percent_unlabeled
+work/data/kdd/kddcup.testdata.unlabeled_10_percent
