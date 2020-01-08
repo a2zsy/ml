@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import sys
 import sklearn
+
 col_names = ["duration","protocol_type","service","flag","src_bytes",
     "dst_bytes","land","wrong_fragment","urgent","hot","num_failed_logins",
     "logged_in","num_compromised","root_shell","su_attempted","num_root",
@@ -22,7 +23,6 @@ col_names = ["duration","protocol_type","service","flag","src_bytes",
 
 df = pd.read_csv(r"E:\study\ml\work\Network-Intrusion-Detection-master\KDDTrain+_2.csv", header=None, names=col_names)
 df_test = pd.read_csv(r"E:\study\ml\work\Network-Intrusion-Detection-master\KDDTest+_2.csv", header=None, names=col_names)
- 
 #寻找train set当中的分类变量
 print('Training set:')
 for col_name in df.columns:
@@ -124,10 +124,12 @@ x_test = newdf_test.drop('label',1)
 y_test = newdf_test.label
 
 from sklearn import preprocessing
-scaler1 = preprocessing.StandardScaler().fit(x_train)
+pd.set_option('precision', 4)
+scaler1 = preprocessing.MinMaxScaler().fit(x_train)
 x_train=scaler1.transform(x_train)
+
 print(x_train.std(axis=0))
-scaler2 = preprocessing.StandardScaler().fit(x_test)
+scaler2 = preprocessing.MinMaxScaler().fit(x_test)
 x_test=scaler2.transform(x_test)
 print(x_test.std(axis=0))
 
@@ -154,7 +156,7 @@ y_test  = keras.utils.to_categorical(y_test,  n_classes)
 # only select 100 training samples 
 idxs_annot = range(x_train.shape[0])
 random.seed(0)
-idxs_annot = np.random.choice(x_train.shape[0], 9)
+idxs_annot = np.random.choice(x_train.shape[0], 100)
 
 x_train_unlabeled = x_train
 x_train_labeled   = x_train[idxs_annot]
@@ -165,11 +167,12 @@ x_train_labeled_rep = np.concatenate([x_train_labeled]*n_rep)
 y_train_labeled_rep = np.concatenate([y_train_labeled]*n_rep)
 
 # initialize the model 
-model = get_ladder_network_fc(layer_sizes=[inp_size, 1000, 500, 250, 250, 250, n_classes])
+model = get_ladder_network_fc(layer_sizes=[inp_size, 200, 50, 25, 25, 25, n_classes])
 
 # train the model for 100 epochs
-for _ in range(9):
+for i in range(100):
     model.fit([x_train_labeled_rep, x_train_unlabeled], y_train_labeled_rep, epochs=1)
     y_test_pr = model.test_model.predict(x_test, batch_size=100)
     print("Test accuracy : %f" % accuracy_score(y_test.argmax(-1), y_test_pr.argmax(-1)))
+    
 
