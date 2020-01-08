@@ -54,7 +54,7 @@ class G_Guass(Layer):
         # Create a trainable weight variable for this layer.
         self.size = input_shape[0][-1]
 
-        init_values = [0., 1., 0., 0., 0., 0., 0., 0., 0., 0.]
+        init_values = [0., 1., 0., 0., 0., 0., 1., 0., 0., 0.]
         self.a = [self.wi(v, 'a' + str(i + 1)) for i, v in enumerate(init_values)]
         super(G_Guass , self).build(input_shape)  # Be sure to call this at the end
 
@@ -66,8 +66,7 @@ class G_Guass(Layer):
 
         mu = compute(self.a[:5])
         v  = compute(self.a[5:])
-
-        z_est = (z_c - mu) * v + mu
+        z_est = (z_c - mu) * v + mu 
         return z_est
     
     def compute_output_shape(self, input_shape):
